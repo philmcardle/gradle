@@ -1,0 +1,44 @@
+apply plugin: 'cpp'
+
+model {
+
+    repositories {
+        libs(PrebuiltLibraries) {
+            PrebuiltLib {
+                binaries.withType(SharedLibraryBinary) {
+                    sharedLibraryFile = file("PrebuiltLib/PrebuiltLib.dll")
+                    sharedLibraryLinkFile = file("PrebuiltLib/PrebuiltLib.lib")
+                }
+            }
+        }
+    }    
+
+    components {
+
+        Lib1(NativeLibrarySpec) {
+            sources {
+                cpp{
+                    lib library: "PrebuiltLib", linkage: "shared"
+                    source{
+                        srcDirs "Lib1"
+                        include "**/*.cpp"
+                    }
+                }
+            }
+        }
+
+        Exe1(NativeExecutableSpec) {
+            sources {
+                cpp{
+                    lib library: 'Lib1', linkage: 'shared'
+
+                    source{
+                        srcDirs "Exe1"
+                        include "**/*.cpp"
+                    }
+                }
+            }
+        }
+
+    }
+}

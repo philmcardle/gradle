@@ -1,0 +1,43 @@
+apply plugin: 'cpp'
+
+model {
+
+    components {
+
+        Lib2(NativeLibrarySpec) {
+            sources {
+                cpp{
+                    source{
+                        srcDirs "Lib2"
+                        include "**/*.cpp"
+                    }
+                }
+            }
+        }
+
+        Lib1(NativeLibrarySpec) {
+            sources {
+                cpp{
+                    lib library: 'Lib2', linkage: 'shared'
+                    source{
+                        srcDirs "Lib1"
+                        include "**/*.cpp"
+                    }
+                }
+            }
+        }
+
+        Exe1(NativeExecutableSpec) {
+            sources {
+                cpp{
+                    lib library: 'Lib1', linkage: 'shared'
+                    source{
+                        srcDirs "Exe1"
+                        include "**/*.cpp"
+                    }
+                }
+            }
+        }
+    }
+
+}
